@@ -84,7 +84,7 @@ async def to_code(config):
     cg.add(server.set_uart_parent(uart))
     cg.add(server.set_address(config[CONF_ADDRESS]))
     if regs := config.get("holding_registers"):
-        _register_range_to_code(regs, server, kind="holding")
+        await _register_range_to_code(regs, server, kind="holding")
     if regs := config.get("input_registers"):
-        _register_range_to_code(regs, server, kind="input")
+        await _register_range_to_code(regs, server, kind="input")
     await cg.register_component(server, config)
