@@ -77,7 +77,7 @@ async def _register_range_to_code(register_config: list[dict[str, Any]], server,
             )
 
 async def to_code(config):
-    cg.add_library("emelianov/modbus-esp8266", "4.1.1")
+    cg.add_library("https://github.com/emelianov/modbus-esp8266.git#4.1.1", None)
     id = config[CONF_ID]
     uart = await cg.get_variable(config["uart_id"])
     server = cg.new_Pvariable(id)
