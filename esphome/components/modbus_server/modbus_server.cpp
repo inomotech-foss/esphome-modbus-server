@@ -13,7 +13,7 @@ ModbusServer::ModbusServer() {}
 
 uint32_t ModbusServer::baudRate() { return this->parent_->get_baud_rate(); }
 
-float Modbus::get_setup_priority() const {
+float ModbusServer::get_setup_priority() const {
   // After UART bus
   return setup_priority::BUS - 1.0f;
 }
