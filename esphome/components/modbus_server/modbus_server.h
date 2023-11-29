@@ -24,7 +24,7 @@ class ModbusServer : public esphome::uart::UARTDevice, public Component, public 
  public:
   explicit ModbusServer();
 
-  float get_setup_priority() const override { return esphome::setup_priority::BUS - 1.0f; }
+  float get_setup_priority() const override;
 
   void setup() override;
   void loop() override;
@@ -62,6 +62,10 @@ class ModbusServer : public esphome::uart::UARTDevice, public Component, public 
   /// @param cb callback to be called when a register is written
   /// @param numregs number of registers to watch
   void on_write_holding_register(uint16_t address, cbOnReadWrite cb, uint16_t numregs = 1);
+
+  bool add_input_register(uint16_t start_address, uint16_t value, uint16_t numregs = 1);
+  void on_read_input_register(uint16_t address, cbOnReadWrite cb, uint16_t numregs = 1);
+  void on_write_input_register(uint16_t address, cbOnReadWrite cb, uint16_t numregs = 1);
 
   // Stream implementation required by ModbusRTU library
   size_t write(uint8_t);

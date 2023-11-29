@@ -13,6 +13,11 @@ ModbusServer::ModbusServer() {}
 
 uint32_t ModbusServer::baudRate() { return this->parent_->get_baud_rate(); }
 
+float Modbus::get_setup_priority() const {
+  // After UART bus
+  return setup_priority::BUS - 1.0f;
+}
+
 void ModbusServer::setup() { mb.begin(this); }
 
 void ModbusServer::set_address(uint8_t address) { mb.slave(address); }
@@ -33,6 +38,20 @@ void ModbusServer::on_read_holding_register(uint16_t address, cbOnReadWrite cb, 
 void ModbusServer::on_write_holding_register(uint16_t address, cbOnReadWrite cb, uint16_t numregs) {
   mb.onSet(
       HREG(address), [cb](TRegister *reg, uint16_t val) -> uint16_t { return cb(reg->address.address, val); }, numregs);
+}
+
+bool ModbusServer::add_input_register(uint16_t start_address, uint16_t value, uint16_t numregs) {
+  return mb.addIreg(start_address, value, numregs);
+}
+
+void ModbusServer::on_read_input_register(uint16_t address, cbOnReadWrite cb, uint16_t numregs) {
+  mb.onGet(
+      IREG(address), [cb](TRegister *reg, uint16_t val) -> uint16_t { return cb(reg->address.address, val); }, numregs);
+}
+
+void ModbusServer::on_write_input_register(uint16_t address, cbOnReadWrite cb, uint16_t numregs) {
+  mb.onSet(
+      IREG(address), [cb](TRegister *reg, uint16_t val) -> uint16_t { return cb(reg->address.address, val); }, numregs);
 }
 
 // Stream class implementation:
